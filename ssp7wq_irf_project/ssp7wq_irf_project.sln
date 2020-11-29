@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29911.84
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ssp7wq_irf_project", "ssp7wq_irf_project\ssp7wq_irf_project.csproj", "{C127EF0B-2C9D-47FD-8BE2-2A7F2AF5C0A5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C127EF0B-2C9D-47FD-8BE2-2A7F2AF5C0A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C127EF0B-2C9D-47FD-8BE2-2A7F2AF5C0A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C127EF0B-2C9D-47FD-8BE2-2A7F2AF5C0A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C127EF0B-2C9D-47FD-8BE2-2A7F2AF5C0A5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {59DDC3CF-F5F7-4C86-A5F3-9D1842BDF987}
+	EndGlobalSection
+EndGlobal

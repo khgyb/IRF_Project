@@ -29,7 +29,7 @@ namespace ssp7wq_irf_project.reserve
 
 				if (_status==1)
 				{
-					BackColor = Color.Green;
+					BackColor = Color.LightGreen;
 				}
 				else if (_status==2)
 				{
@@ -42,11 +42,24 @@ namespace ssp7wq_irf_project.reserve
 			}
 		}
 
-		public Seat()
+		public Seat(int status)
 		{
 			Width = 20;
 			Height = Width;
+			if (status==0)
+			{
+				Status = 1;
+			}
+			else if (status==1)
+			{
+				Status = 3;
+			}
+			MouseClick += Seat_MouseClick;
 		}
 
+		private void Seat_MouseClick(object sender, MouseEventArgs e)
+		{
+			Status++;
+		}
 	}
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="996a1be8150d4569942af00fc0076e24" Name="Diagram1">
+        <EntityTypeShape EntityType="Mozi_jegy_musor_kezelesModel.Film" Width="1.5" PointX="0.5" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Mozi_jegy_musor_kezelesModel.Foglalas" Width="1.5" PointX="5.25" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Mozi_jegy_musor_kezelesModel.Musor" Width="1.5" PointX="3" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Mozi_jegy_musor_kezelesModel.Terem" Width="1.5" PointX="3" PointY="5.5" IsExpanded="true" />
+        <AssociationConnector Association="Mozi_jegy_musor_kezelesModel.FK_Musor_ToFilm" ManuallyRouted="false" />
+        <AssociationConnector Association="Mozi_jegy_musor_kezelesModel.FK_Foglalas_ToMusor" ManuallyRouted="false" />
+        <AssociationConnector Association="Mozi_jegy_musor_kezelesModel.FK_Foglalas_ToSzek" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

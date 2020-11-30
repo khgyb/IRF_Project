@@ -1,0 +1,277 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Mozi_jegy_musor_kezelesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Film">
+          <Key>
+            <PropertyRef Name="Id_Film" />
+          </Key>
+          <Property Name="Id_Film" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Cím" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Kiadas_eve" Type="nchar" MaxLength="4" Nullable="false" />
+          <Property Name="Rendezo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Mufaj" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Nyelv" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Felirat" Type="nvarchar" MaxLength="50" />
+          <Property Name="Hossz(perc)" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Foglalas">
+          <Key>
+            <PropertyRef Name="Id_Foglalas" />
+          </Key>
+          <Property Name="Id_Foglalas" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Musor_Id" Type="int" Nullable="false" />
+          <Property Name="Szek_Id" Type="int" />
+          <Property Name="Foglalt" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Musor">
+          <Key>
+            <PropertyRef Name="Id_Musor" />
+          </Key>
+          <Property Name="Id_Musor" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Film_Id" Type="int" Nullable="false" />
+          <Property Name="Datum" Type="date" Nullable="false" />
+          <Property Name="Idopont" Type="time" Precision="7" />
+        </EntityType>
+        <EntityType Name="Terem">
+          <Key>
+            <PropertyRef Name="Id_Szek" />
+          </Key>
+          <Property Name="Id_Szek" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Sorszam" Type="int" />
+          <Property Name="Oszlopszam" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Foglalas_ToMusor">
+          <End Role="Musor" Type="Self.Musor" Multiplicity="1" />
+          <End Role="Foglalas" Type="Self.Foglalas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Musor">
+              <PropertyRef Name="Id_Musor" />
+            </Principal>
+            <Dependent Role="Foglalas">
+              <PropertyRef Name="Musor_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Foglalas_ToSzek">
+          <End Role="Terem" Type="Self.Terem" Multiplicity="0..1" />
+          <End Role="Foglalas" Type="Self.Foglalas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Terem">
+              <PropertyRef Name="Id_Szek" />
+            </Principal>
+            <Dependent Role="Foglalas">
+              <PropertyRef Name="Szek_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Musor_ToFilm">
+          <End Role="Film" Type="Self.Film" Multiplicity="1" />
+          <End Role="Musor" Type="Self.Musor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Film">
+              <PropertyRef Name="Id_Film" />
+            </Principal>
+            <Dependent Role="Musor">
+              <PropertyRef Name="Film_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Mozi_jegy_musor_kezelesModelStoreContainer">
+          <EntitySet Name="Film" EntityType="Self.Film" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Foglalas" EntityType="Self.Foglalas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Musor" EntityType="Self.Musor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Terem" EntityType="Self.Terem" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Foglalas_ToMusor" Association="Self.FK_Foglalas_ToMusor">
+            <End Role="Musor" EntitySet="Musor" />
+            <End Role="Foglalas" EntitySet="Foglalas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Foglalas_ToSzek" Association="Self.FK_Foglalas_ToSzek">
+            <End Role="Terem" EntitySet="Terem" />
+            <End Role="Foglalas" EntitySet="Foglalas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Musor_ToFilm" Association="Self.FK_Musor_ToFilm">
+            <End Role="Film" EntitySet="Film" />
+            <End Role="Musor" EntitySet="Musor" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Mozi_jegy_musor_kezelesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Film">
+          <Key>
+            <PropertyRef Name="Id_Film" />
+          </Key>
+          <Property Name="Id_Film" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Cím" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Kiadas_eve" Type="String" MaxLength="4" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Rendezo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Mufaj" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Nyelv" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Felirat" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Hossz_perc_" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Musor" Relationship="Self.FK_Musor_ToFilm" FromRole="Film" ToRole="Musor" />
+        </EntityType>
+        <EntityType Name="Foglalas">
+          <Key>
+            <PropertyRef Name="Id_Foglalas" />
+          </Key>
+          <Property Name="Id_Foglalas" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Musor_Id" Type="Int32" Nullable="false" />
+          <Property Name="Szek_Id" Type="Int32" />
+          <Property Name="Foglalt" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Musor" Relationship="Self.FK_Foglalas_ToMusor" FromRole="Foglalas" ToRole="Musor" />
+          <NavigationProperty Name="Terem" Relationship="Self.FK_Foglalas_ToSzek" FromRole="Foglalas" ToRole="Terem" />
+        </EntityType>
+        <EntityType Name="Musor">
+          <Key>
+            <PropertyRef Name="Id_Musor" />
+          </Key>
+          <Property Name="Id_Musor" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Film_Id" Type="Int32" Nullable="false" />
+          <Property Name="Datum" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Idopont" Type="Time" Precision="7" />
+          <NavigationProperty Name="Film" Relationship="Self.FK_Musor_ToFilm" FromRole="Musor" ToRole="Film" />
+          <NavigationProperty Name="Foglalas" Relationship="Self.FK_Foglalas_ToMusor" FromRole="Musor" ToRole="Foglalas" />
+        </EntityType>
+        <EntityType Name="Terem">
+          <Key>
+            <PropertyRef Name="Id_Szek" />
+          </Key>
+          <Property Name="Id_Szek" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Sorszam" Type="Int32" />
+          <Property Name="Oszlopszam" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Foglalas" Relationship="Self.FK_Foglalas_ToSzek" FromRole="Terem" ToRole="Foglalas" />
+        </EntityType>
+        <Association Name="FK_Musor_ToFilm">
+          <End Role="Film" Type="Self.Film" Multiplicity="1" />
+          <End Role="Musor" Type="Self.Musor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Film">
+              <PropertyRef Name="Id_Film" />
+            </Principal>
+            <Dependent Role="Musor">
+              <PropertyRef Name="Film_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Foglalas_ToMusor">
+          <End Role="Musor" Type="Self.Musor" Multiplicity="1" />
+          <End Role="Foglalas" Type="Self.Foglalas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Musor">
+              <PropertyRef Name="Id_Musor" />
+            </Principal>
+            <Dependent Role="Foglalas">
+              <PropertyRef Name="Musor_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Foglalas_ToSzek">
+          <End Role="Terem" Type="Self.Terem" Multiplicity="0..1" />
+          <End Role="Foglalas" Type="Self.Foglalas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Terem">
+              <PropertyRef Name="Id_Szek" />
+            </Principal>
+            <Dependent Role="Foglalas">
+              <PropertyRef Name="Szek_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Mozi_jegy_musor_kezelesEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Film" EntityType="Self.Film" />
+          <EntitySet Name="Foglalas" EntityType="Self.Foglalas" />
+          <EntitySet Name="Musor" EntityType="Self.Musor" />
+          <EntitySet Name="Terem" EntityType="Self.Terem" />
+          <AssociationSet Name="FK_Musor_ToFilm" Association="Self.FK_Musor_ToFilm">
+            <End Role="Film" EntitySet="Film" />
+            <End Role="Musor" EntitySet="Musor" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Foglalas_ToMusor" Association="Self.FK_Foglalas_ToMusor">
+            <End Role="Musor" EntitySet="Musor" />
+            <End Role="Foglalas" EntitySet="Foglalas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Foglalas_ToSzek" Association="Self.FK_Foglalas_ToSzek">
+            <End Role="Terem" EntitySet="Terem" />
+            <End Role="Foglalas" EntitySet="Foglalas" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Mozi_jegy_musor_kezelesModelStoreContainer" CdmEntityContainer="Mozi_jegy_musor_kezelesEntities">
+          <EntitySetMapping Name="Film">
+            <EntityTypeMapping TypeName="Mozi_jegy_musor_kezelesModel.Film">
+              <MappingFragment StoreEntitySet="Film">
+                <ScalarProperty Name="Id_Film" ColumnName="Id_Film" />
+                <ScalarProperty Name="Cím" ColumnName="Cím" />
+                <ScalarProperty Name="Kiadas_eve" ColumnName="Kiadas_eve" />
+                <ScalarProperty Name="Rendezo" ColumnName="Rendezo" />
+                <ScalarProperty Name="Mufaj" ColumnName="Mufaj" />
+                <ScalarProperty Name="Nyelv" ColumnName="Nyelv" />
+                <ScalarProperty Name="Felirat" ColumnName="Felirat" />
+                <ScalarProperty Name="Hossz_perc_" ColumnName="Hossz(perc)" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Foglalas">
+            <EntityTypeMapping TypeName="Mozi_jegy_musor_kezelesModel.Foglalas">
+              <MappingFragment StoreEntitySet="Foglalas">
+                <ScalarProperty Name="Id_Foglalas" ColumnName="Id_Foglalas" />
+                <ScalarProperty Name="Musor_Id" ColumnName="Musor_Id" />
+                <ScalarProperty Name="Szek_Id" ColumnName="Szek_Id" />
+                <ScalarProperty Name="Foglalt" ColumnName="Foglalt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Musor">
+            <EntityTypeMapping TypeName="Mozi_jegy_musor_kezelesModel.Musor">
+              <MappingFragment StoreEntitySet="Musor">
+                <ScalarProperty Name="Id_Musor" ColumnName="Id_Musor" />
+                <ScalarProperty Name="Film_Id" ColumnName="Film_Id" />
+                <ScalarProperty Name="Datum" ColumnName="Datum" />
+                <ScalarProperty Name="Idopont" ColumnName="Idopont" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Terem">
+            <EntityTypeMapping TypeName="Mozi_jegy_musor_kezelesModel.Terem">
+              <MappingFragment StoreEntitySet="Terem">
+                <ScalarProperty Name="Id_Szek" ColumnName="Id_Szek" />
+                <ScalarProperty Name="Sorszam" ColumnName="Sorszam" />
+                <ScalarProperty Name="Oszlopszam" ColumnName="Oszlopszam" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

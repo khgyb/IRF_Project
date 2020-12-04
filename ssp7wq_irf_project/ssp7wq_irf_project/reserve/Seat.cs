@@ -10,6 +10,8 @@ namespace ssp7wq_irf_project.reserve
 {
     class Seat : Button
     {
+		public int sszam { get; set; }
+
 		private int _status;
 
 		public int Status
@@ -72,6 +74,7 @@ namespace ssp7wq_irf_project.reserve
 			{
 				Status = 1;
 			}
+			
 			
 		}
 	}

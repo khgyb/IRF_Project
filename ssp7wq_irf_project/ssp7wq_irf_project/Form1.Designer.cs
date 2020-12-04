@@ -34,6 +34,7 @@
             this.listBox3 = new System.Windows.Forms.ListBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.btn_load = new System.Windows.Forms.Button();
+            this.btn_save = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listBox1
@@ -95,11 +96,22 @@
             this.btn_load.UseVisualStyleBackColor = true;
             this.btn_load.Click += new System.EventHandler(this.btn_load_Click);
             // 
+            // btn_save
+            // 
+            this.btn_save.Location = new System.Drawing.Point(589, 223);
+            this.btn_save.Name = "btn_save";
+            this.btn_save.Size = new System.Drawing.Size(108, 30);
+            this.btn_save.TabIndex = 6;
+            this.btn_save.Text = "Mentés";
+            this.btn_save.UseVisualStyleBackColor = true;
+            this.btn_save.Click += new System.EventHandler(this.btn_save_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1562, 866);
+            this.Controls.Add(this.btn_save);
             this.Controls.Add(this.btn_load);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.listBox3);
@@ -121,6 +133,7 @@
         private System.Windows.Forms.ListBox listBox3;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button btn_load;
+        private System.Windows.Forms.Button btn_save;
     }
 }
 

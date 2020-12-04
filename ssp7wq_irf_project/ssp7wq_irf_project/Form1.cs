@@ -15,6 +15,8 @@ namespace ssp7wq_irf_project
     public partial class Form1 : Form
     {
         Mozi_jegy_musor_kezelesEntities context = new Mozi_jegy_musor_kezelesEntities();
+        MainPanel mp;
+        bool[] foglalas;
 
         public Form1()
         {
@@ -26,7 +28,10 @@ namespace ssp7wq_irf_project
 
             LoadMenu();
 
-
+            int width = this.Width;
+            int height = this.Height - 250;
+            mp = new MainPanel(width, height);
+            Controls.Add(mp);
         }
 
 
@@ -148,31 +153,25 @@ namespace ssp7wq_irf_project
 
         private void btn_load_Click(object sender, EventArgs e)
         {
-            int width = this.Width;
-            int height = this.Height - 250;
-            MainPanel mp = new MainPanel(width, height);
-            Controls.Add(mp);
+            mp.Controls.Clear();
 
             var msr = ((Musor)listBox3.SelectedItem).Id_Musor;
-            /*var musor_kiv = (from x in context.Musor
-                             where x.Id_Musor
-                             select x);*/
 
-            bool[] foglalas = (from x in context.Foglalas
+            foglalas = (from x in context.Foglalas
                                where x.Musor_Id == msr
                                select x.Foglalt).ToArray();
+
             int szamlalo = 0;
             int status = 1;
 
-            
-            MessageBox.Show(foglalas[szamlalo].ToString());
             for (int i = 0; i < 5; i++)
             {
                 for (int j = 0; j < 14; j++)
                 {
-                    status = asdf(foglalas, szamlalo, status);
+                    status = stat(foglalas, szamlalo, status);
 
                     Seat s = new Seat(status);
+                    s.sszam = szamlalo + 1;
                     s.Top = i * 30;
                     s.Left = j * 30;
                     mp.Controls.Add(s);
@@ -182,7 +181,7 @@ namespace ssp7wq_irf_project
 
         }
 
-        private static int asdf(bool[] foglalas, int szamlalo, int status)
+        private static int stat(bool[] foglalas, int szamlalo, int status)
         {
             if (foglalas[szamlalo] == false)
             {
@@ -194,6 +193,32 @@ namespace ssp7wq_irf_project
             }
 
             return status;
+        }
+
+        private void btn_save_Click(object sender, EventArgs e)
+        {
+            foreach (Seat s in mp.Controls)
+            {
+                var foglalt = (from x in context.Foglalas
+                             where x.Id_Foglalas==s.sszam
+                             select x).FirstOrDefault();
+
+                if (foglalt.Foglalt==false && s.Status==2)
+                {
+                    s.Status = 3;
+                    s.Enabled = false;
+                    foglalt.Foglalt = true;
+                }
+                try
+                {
+                    context.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+
+                    MessageBox.Show(ex.Message);
+                }
+            }
         }
     }
 }

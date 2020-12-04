@@ -164,27 +164,38 @@ namespace ssp7wq_irf_project
 
             var msr = ((Musor)listBox3.SelectedItem).Id_Musor;
 
-            foglalas = (from x in context.Foglalas
-                               where x.Musor_Id == msr
-                               select x.Foglalt).ToArray();
-
-            int szamlalo = 0;
-            int status = 1;
-
-            for (int i = 0; i < 5; i++)
+            var letezik = (from x in context.Foglalas
+                           where x.Musor_Id == msr
+                           select x.Id_Foglalas).FirstOrDefault();
+            if (letezik!=0)
             {
-                for (int j = 0; j < 14; j++)
-                {
-                    status = stat(foglalas, szamlalo, status);
+                foglalas = (from x in context.Foglalas
+                            where x.Musor_Id == msr
+                            select x.Foglalt).ToArray();
 
-                    Seat s = new Seat(status);
-                    s.sszam = szamlalo + 1;
-                    s.Top = 100+i * 60;
-                    s.Left = 20+j * 60;
-                    mp.Controls.Add(s);
-                    szamlalo++;
+                int szamlalo = 0;
+                int status = 1;
+
+                for (int i = 0; i < 5; i++)
+                {
+                    for (int j = 0; j < 14; j++)
+                    {
+                        status = stat(foglalas, szamlalo, status);
+
+                        Seat s = new Seat(status);
+                        s.sszam = szamlalo + 1;
+                        s.Top = 100 + i * 60;
+                        s.Left = 20 + j * 60;
+                        mp.Controls.Add(s);
+                        szamlalo++;
+                    }
                 }
             }
+            else
+            {
+                MessageBox.Show("A kiválasztott előadás nem létezik!");
+            }
+
 
         }
 

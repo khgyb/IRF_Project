@@ -46,20 +46,33 @@ namespace ssp7wq_irf_project.reserve
 		{
 			Width = 20;
 			Height = Width;
-			if (status==0)
+			if (status==1)
 			{
 				Status = 1;
 			}
-			else if (status==1)
+			else if (status==3)
 			{
 				Status = 3;
+			}
+
+			if (Status==3)
+			{
+				Enabled = false;
 			}
 			MouseClick += Seat_MouseClick;
 		}
 
 		private void Seat_MouseClick(object sender, MouseEventArgs e)
 		{
-			Status++;
+			if (Status==1)
+			{
+				Status = 2;
+			}
+			else
+			{
+				Status = 1;
+			}
+			
 		}
 	}
 }

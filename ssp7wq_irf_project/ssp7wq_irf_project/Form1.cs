@@ -16,9 +16,6 @@ namespace ssp7wq_irf_project
     {
         Mozi_jegy_musor_kezelesEntities context = new Mozi_jegy_musor_kezelesEntities();
 
-        //BindingSource FilmBindingSource = new BindingSource();
-        //BindingSource MusorBindingSource = new BindingSource();
-        //BindingSource IdopontBindingSource = new BindingSource();
         public Form1()
         {
             InitializeComponent();
@@ -29,9 +26,10 @@ namespace ssp7wq_irf_project
 
             LoadMenu();
 
-            LoadPanel();
 
         }
+
+
 
         private void LoadMenu()
         {
@@ -42,8 +40,7 @@ namespace ssp7wq_irf_project
                 case "Film címe":
                     textBox1.Enabled = true;
                     textBox1.Clear();
-                    //listBox2.DataSource = MusorBindingSource;
-                    //listBox3.DataSource = IdopontBindingSource;
+
 
                     var cim = (from x in context.Film
                                where x.Cím.StartsWith(textBox1.Text)
@@ -51,15 +48,7 @@ namespace ssp7wq_irf_project
                     listBox1.DisplayMember = "Cím";
                     listBox1.DataSource = cim.ToList();
 
-                    /*
-                    var musor = (from x in context.Musor
-                                 select x.Datum);
-                    MusorBindingSource.DataSource = musor.ToList();
 
-                    var idopont = (from x in context.Musor
-                                 select x.Idopont);
-                    IdopontBindingSource.DataSource = musor.ToList();
-                    */
                     break;
                 case "Dátum":
                     textBox1.Enabled = false;
@@ -80,16 +69,7 @@ namespace ssp7wq_irf_project
             listBox3.Refresh();
         }
 
-        private void LoadPanel()
-        {
-            Panel MainPanel = new Panel();
-            MainPanel.Top = 50;
-            MainPanel.Left = 0;
-            MainPanel.Width = this.Width;
-            MainPanel.Height = this.Height - 50;
-            MainPanel.BackColor = Color.Green;
-            Controls.Add(MainPanel);
-        }
+
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -105,7 +85,6 @@ namespace ssp7wq_irf_project
                 case "Film címe":
                     textBox1.Enabled = true;
                     textBox1.Clear();
-                    //listBox3.DataSource = IdopontBindingSource;
 
                     var film = ((Film)listBox1.SelectedItem).Id_Film;
                     var musor = (from x in context.Musor
@@ -113,11 +92,7 @@ namespace ssp7wq_irf_project
                                  select x);
                     listBox2.DisplayMember = "Datum";
                     listBox2.DataSource = musor.ToList();
-                    /*
-                    var idopont = (from x in context.Musor
-                                   select x.Idopont);
-                    IdopontBindingSource.DataSource = musor.ToList();
-                    */
+
                     break;
                 case "Dátum":
                     textBox1.Enabled = false;
@@ -149,11 +124,7 @@ namespace ssp7wq_irf_project
                                  select x);
                     listBox3.DisplayMember = "Idopont";
                     listBox3.DataSource = idop.ToList();
-                    /*
-                    var idopont = (from x in context.Musor
-                                   select x.Idopont);
-                    IdopontBindingSource.DataSource = musor.ToList();
-                    */
+
                     break;
                 case "Dátum":
                     textBox1.Enabled = false;
@@ -173,6 +144,56 @@ namespace ssp7wq_irf_project
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             LoadMenu();
+        }
+
+        private void btn_load_Click(object sender, EventArgs e)
+        {
+            int width = this.Width;
+            int height = this.Height - 250;
+            MainPanel mp = new MainPanel(width, height);
+            Controls.Add(mp);
+
+            var msr = ((Musor)listBox3.SelectedItem).Id_Musor;
+            /*var musor_kiv = (from x in context.Musor
+                             where x.Id_Musor
+                             select x);*/
+
+            bool[] foglalas = (from x in context.Foglalas
+                               where x.Musor_Id == msr
+                               select x.Foglalt).ToArray();
+            int szamlalo = 0;
+            int status = 1;
+
+            
+            MessageBox.Show(foglalas[szamlalo].ToString());
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < 14; j++)
+                {
+                    status = asdf(foglalas, szamlalo, status);
+
+                    Seat s = new Seat(status);
+                    s.Top = i * 30;
+                    s.Left = j * 30;
+                    mp.Controls.Add(s);
+                    szamlalo++;
+                }
+            }
+
+        }
+
+        private static int asdf(bool[] foglalas, int szamlalo, int status)
+        {
+            if (foglalas[szamlalo] == false)
+            {
+                status = 1;
+            }
+            else if (foglalas[szamlalo] == true)
+            {
+                status = 3;
+            }
+
+            return status;
         }
     }
 }

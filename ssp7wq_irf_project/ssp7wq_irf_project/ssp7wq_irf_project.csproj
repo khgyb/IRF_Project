@@ -102,6 +102,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="reserve\MainPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="reserve\Seat.cs">
       <SubType>Component</SubType>
     </Compile>

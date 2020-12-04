@@ -1,4 +1,5 @@
-﻿using ssp7wq_irf_project.reserve;
+﻿using ssp7wq_irf_project.Entities;
+using ssp7wq_irf_project.reserve;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,6 +18,7 @@ namespace ssp7wq_irf_project
         Mozi_jegy_musor_kezelesEntities context = new Mozi_jegy_musor_kezelesEntities();
         MainPanel mp;
         bool[] foglalas;
+        int foglalt_helyek_szama = 0;
 
         public Form1()
         {
@@ -52,7 +54,6 @@ namespace ssp7wq_irf_project
                                select x);
                     listBox1.DisplayMember = "Cím";
                     listBox1.DataSource = cim.ToList();
-
 
                     break;
                 case "Dátum":
@@ -97,6 +98,9 @@ namespace ssp7wq_irf_project
                                  select x);
                     listBox2.DisplayMember = "Datum";
                     listBox2.DataSource = musor.ToList();
+                    filmBindingSource.DataSource = (from x in context.Film
+                                                    where x.Id_Film == film
+                                                    select x).ToList();
 
                     break;
                 case "Dátum":
@@ -140,6 +144,9 @@ namespace ssp7wq_irf_project
                                  select x);
                     listBox3.DisplayMember = "Idopont";
                     listBox3.DataSource = idopont.ToList();
+                    filmBindingSource.DataSource = (from x in context.Film
+                                                    where x.Id_Film == filmcim
+                                                    select x).ToList();
                     break;
                 default:
                     break;
@@ -172,8 +179,8 @@ namespace ssp7wq_irf_project
 
                     Seat s = new Seat(status);
                     s.sszam = szamlalo + 1;
-                    s.Top = i * 30;
-                    s.Left = j * 30;
+                    s.Top = 100+i * 60;
+                    s.Left = 20+j * 60;
                     mp.Controls.Add(s);
                     szamlalo++;
                 }
@@ -200,17 +207,39 @@ namespace ssp7wq_irf_project
             foreach (Seat s in mp.Controls)
             {
                 var foglalt = (from x in context.Foglalas
-                             where x.Id_Foglalas==s.sszam
-                             select x).FirstOrDefault();
+                               where x.Id_Foglalas == s.sszam
+                               select x).FirstOrDefault();
 
-                if (foglalt.Foglalt==false && s.Status==2)
+                if (foglalt.Foglalt == false && s.Status == 2)
                 {
-                    s.Status = 3;
-                    s.Enabled = false;
-                    foglalt.Foglalt = true;
+                    foglalt_helyek_szama++;
                 }
+
+            }
+
+            Mentes m = new Mentes();
+            m.textBox1.Text = foglalt_helyek_szama.ToString();
+            m.textBox2.Text = ((foglalt_helyek_szama * 1000).ToString() + " Ft");
+            
+            if (m.ShowDialog()==DialogResult.OK)
+            {
                 try
                 {
+                    foreach (Seat s in mp.Controls)
+                    {
+                        var foglalt = (from x in context.Foglalas
+                                       where x.Id_Foglalas == s.sszam
+                                       select x).FirstOrDefault();
+
+                        if (foglalt.Foglalt == false && s.Status == 2)
+                        {
+                            s.Status = 3;
+                            s.Enabled = false;
+                            foglalt.Foglalt = true;
+                            foglalt_helyek_szama++;
+                        }
+
+                    }
                     context.SaveChanges();
                 }
                 catch (Exception ex)
@@ -218,6 +247,19 @@ namespace ssp7wq_irf_project
 
                     MessageBox.Show(ex.Message);
                 }
+            }
+
+        }
+
+        private void btn_ccel_Click(object sender, EventArgs e)
+        {
+            foreach (Seat s in mp.Controls)
+            {
+                if (s.Status == 2)
+                {
+                    s.Status = 1;
+                }
+
             }
         }
     }

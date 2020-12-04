@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.listBox2 = new System.Windows.Forms.ListBox();
@@ -35,6 +36,18 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.btn_load = new System.Windows.Forms.Button();
             this.btn_save = new System.Windows.Forms.Button();
+            this.filmDataGridView = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.filmBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.btn_ccel = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.filmDataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.filmBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // listBox1
@@ -88,7 +101,7 @@
             // 
             // btn_load
             // 
-            this.btn_load.Location = new System.Drawing.Point(589, 272);
+            this.btn_load.Location = new System.Drawing.Point(589, 122);
             this.btn_load.Name = "btn_load";
             this.btn_load.Size = new System.Drawing.Size(108, 30);
             this.btn_load.TabIndex = 5;
@@ -98,7 +111,7 @@
             // 
             // btn_save
             // 
-            this.btn_save.Location = new System.Drawing.Point(589, 223);
+            this.btn_save.Location = new System.Drawing.Point(589, 218);
             this.btn_save.Name = "btn_save";
             this.btn_save.Size = new System.Drawing.Size(108, 30);
             this.btn_save.TabIndex = 6;
@@ -106,11 +119,98 @@
             this.btn_save.UseVisualStyleBackColor = true;
             this.btn_save.Click += new System.EventHandler(this.btn_save_Click);
             // 
+            // filmDataGridView
+            // 
+            this.filmDataGridView.AutoGenerateColumns = false;
+            this.filmDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.filmDataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.filmDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.filmDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn2,
+            this.dataGridViewTextBoxColumn3,
+            this.dataGridViewTextBoxColumn4,
+            this.dataGridViewTextBoxColumn5,
+            this.dataGridViewTextBoxColumn6,
+            this.dataGridViewTextBoxColumn7,
+            this.dataGridViewTextBoxColumn8});
+            this.filmDataGridView.DataSource = this.filmBindingSource;
+            this.filmDataGridView.Location = new System.Drawing.Point(589, 30);
+            this.filmDataGridView.Name = "filmDataGridView";
+            this.filmDataGridView.RowHeadersWidth = 51;
+            this.filmDataGridView.RowTemplate.Height = 24;
+            this.filmDataGridView.Size = new System.Drawing.Size(961, 70);
+            this.filmDataGridView.TabIndex = 8;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.DataPropertyName = "Cím";
+            this.dataGridViewTextBoxColumn2.HeaderText = "Cím";
+            this.dataGridViewTextBoxColumn2.MinimumWidth = 6;
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            this.dataGridViewTextBoxColumn3.DataPropertyName = "Kiadas_eve";
+            this.dataGridViewTextBoxColumn3.HeaderText = "Kiadás éve";
+            this.dataGridViewTextBoxColumn3.MinimumWidth = 6;
+            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            this.dataGridViewTextBoxColumn4.DataPropertyName = "Rendezo";
+            this.dataGridViewTextBoxColumn4.HeaderText = "Rendező";
+            this.dataGridViewTextBoxColumn4.MinimumWidth = 6;
+            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            // 
+            // dataGridViewTextBoxColumn5
+            // 
+            this.dataGridViewTextBoxColumn5.DataPropertyName = "Mufaj";
+            this.dataGridViewTextBoxColumn5.HeaderText = "Műfaj";
+            this.dataGridViewTextBoxColumn5.MinimumWidth = 6;
+            this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
+            // 
+            // dataGridViewTextBoxColumn6
+            // 
+            this.dataGridViewTextBoxColumn6.DataPropertyName = "Nyelv";
+            this.dataGridViewTextBoxColumn6.HeaderText = "Nyelv";
+            this.dataGridViewTextBoxColumn6.MinimumWidth = 6;
+            this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
+            // 
+            // dataGridViewTextBoxColumn7
+            // 
+            this.dataGridViewTextBoxColumn7.DataPropertyName = "Felirat";
+            this.dataGridViewTextBoxColumn7.HeaderText = "Felirat";
+            this.dataGridViewTextBoxColumn7.MinimumWidth = 6;
+            this.dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
+            // 
+            // dataGridViewTextBoxColumn8
+            // 
+            this.dataGridViewTextBoxColumn8.DataPropertyName = "Hossz_perc_";
+            this.dataGridViewTextBoxColumn8.HeaderText = "Hossz (perc)";
+            this.dataGridViewTextBoxColumn8.MinimumWidth = 6;
+            this.dataGridViewTextBoxColumn8.Name = "dataGridViewTextBoxColumn8";
+            // 
+            // filmBindingSource
+            // 
+            this.filmBindingSource.DataSource = typeof(ssp7wq_irf_project.Film);
+            // 
+            // btn_ccel
+            // 
+            this.btn_ccel.Location = new System.Drawing.Point(589, 170);
+            this.btn_ccel.Name = "btn_ccel";
+            this.btn_ccel.Size = new System.Drawing.Size(108, 30);
+            this.btn_ccel.TabIndex = 9;
+            this.btn_ccel.Text = "Mégse";
+            this.btn_ccel.UseVisualStyleBackColor = true;
+            this.btn_ccel.Click += new System.EventHandler(this.btn_ccel_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1562, 866);
+            this.Controls.Add(this.btn_ccel);
+            this.Controls.Add(this.filmDataGridView);
             this.Controls.Add(this.btn_save);
             this.Controls.Add(this.btn_load);
             this.Controls.Add(this.textBox1);
@@ -120,6 +220,8 @@
             this.Controls.Add(this.listBox1);
             this.Name = "Form1";
             this.Text = "Form1";
+            ((System.ComponentModel.ISupportInitialize)(this.filmDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.filmBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -134,6 +236,16 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button btn_load;
         private System.Windows.Forms.Button btn_save;
+        private System.Windows.Forms.BindingSource filmBindingSource;
+        private System.Windows.Forms.DataGridView filmDataGridView;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn7;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn8;
+        private System.Windows.Forms.Button btn_ccel;
     }
 }
 

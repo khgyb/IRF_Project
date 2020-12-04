@@ -46,7 +46,7 @@ namespace ssp7wq_irf_project.reserve
 
 		public Seat(int status)
 		{
-			Width = 20;
+			Width = 40;
 			Height = Width;
 			if (status==1)
 			{

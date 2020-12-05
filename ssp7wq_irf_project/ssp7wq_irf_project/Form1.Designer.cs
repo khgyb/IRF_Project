@@ -37,6 +37,8 @@
             this.btn_load = new System.Windows.Forms.Button();
             this.btn_save = new System.Windows.Forms.Button();
             this.filmDataGridView = new System.Windows.Forms.DataGridView();
+            this.btn_ccel = new System.Windows.Forms.Button();
+            this.btn_export = new System.Windows.Forms.Button();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -45,7 +47,6 @@
             this.dataGridViewTextBoxColumn7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.filmBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.btn_ccel = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.filmDataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.filmBindingSource)).BeginInit();
             this.SuspendLayout();
@@ -111,7 +112,7 @@
             // 
             // btn_save
             // 
-            this.btn_save.Location = new System.Drawing.Point(589, 218);
+            this.btn_save.Location = new System.Drawing.Point(589, 222);
             this.btn_save.Name = "btn_save";
             this.btn_save.Size = new System.Drawing.Size(108, 30);
             this.btn_save.TabIndex = 6;
@@ -121,6 +122,11 @@
             // 
             // filmDataGridView
             // 
+            this.filmDataGridView.AllowUserToAddRows = false;
+            this.filmDataGridView.AllowUserToDeleteRows = false;
+            this.filmDataGridView.AllowUserToOrderColumns = true;
+            this.filmDataGridView.AllowUserToResizeColumns = false;
+            this.filmDataGridView.AllowUserToResizeRows = false;
             this.filmDataGridView.AutoGenerateColumns = false;
             this.filmDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.filmDataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
@@ -140,6 +146,26 @@
             this.filmDataGridView.RowTemplate.Height = 24;
             this.filmDataGridView.Size = new System.Drawing.Size(961, 70);
             this.filmDataGridView.TabIndex = 8;
+            // 
+            // btn_ccel
+            // 
+            this.btn_ccel.Location = new System.Drawing.Point(589, 172);
+            this.btn_ccel.Name = "btn_ccel";
+            this.btn_ccel.Size = new System.Drawing.Size(108, 30);
+            this.btn_ccel.TabIndex = 9;
+            this.btn_ccel.Text = "Mégse";
+            this.btn_ccel.UseVisualStyleBackColor = true;
+            this.btn_ccel.Click += new System.EventHandler(this.btn_ccel_Click);
+            // 
+            // btn_export
+            // 
+            this.btn_export.Location = new System.Drawing.Point(589, 272);
+            this.btn_export.Name = "btn_export";
+            this.btn_export.Size = new System.Drawing.Size(108, 30);
+            this.btn_export.TabIndex = 10;
+            this.btn_export.Text = "Exportálás";
+            this.btn_export.UseVisualStyleBackColor = true;
+            this.btn_export.Click += new System.EventHandler(this.btn_export_Click);
             // 
             // dataGridViewTextBoxColumn2
             // 
@@ -194,21 +220,12 @@
             // 
             this.filmBindingSource.DataSource = typeof(ssp7wq_irf_project.Film);
             // 
-            // btn_ccel
-            // 
-            this.btn_ccel.Location = new System.Drawing.Point(589, 170);
-            this.btn_ccel.Name = "btn_ccel";
-            this.btn_ccel.Size = new System.Drawing.Size(108, 30);
-            this.btn_ccel.TabIndex = 9;
-            this.btn_ccel.Text = "Mégse";
-            this.btn_ccel.UseVisualStyleBackColor = true;
-            this.btn_ccel.Click += new System.EventHandler(this.btn_ccel_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1562, 866);
+            this.Controls.Add(this.btn_export);
             this.Controls.Add(this.btn_ccel);
             this.Controls.Add(this.filmDataGridView);
             this.Controls.Add(this.btn_save);
@@ -246,6 +263,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn7;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn8;
         private System.Windows.Forms.Button btn_ccel;
+        private System.Windows.Forms.Button btn_export;
     }
 }
 

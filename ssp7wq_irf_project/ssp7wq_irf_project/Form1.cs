@@ -10,6 +10,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Excel = Microsoft.Office.Interop.Excel;
+using System.Reflection;
 
 namespace ssp7wq_irf_project
 {
@@ -19,6 +21,10 @@ namespace ssp7wq_irf_project
         MainPanel mp;
         bool[] foglalas;
         int foglalt_helyek_szama = 0;
+        Excel.Application xlApp;
+        Excel.Workbook xlWB;
+        Excel.Worksheet xlSheet;
+        List<Musor> Musor;
 
         public Form1()
         {
@@ -162,41 +168,65 @@ namespace ssp7wq_irf_project
         {
             mp.Controls.Clear();
 
-            var msr = ((Musor)listBox3.SelectedItem).Id_Musor;
-
-            var letezik = (from x in context.Foglalas
-                           where x.Musor_Id == msr
-                           select x.Id_Foglalas).FirstOrDefault();
-            if (letezik!=0)
+            if (listBox3.SelectedItem!=null)
             {
-                foglalas = (from x in context.Foglalas
-                            where x.Musor_Id == msr
-                            select x.Foglalt).ToArray();
+                var msr = ((Musor)listBox3.SelectedItem).Id_Musor;
 
-                int szamlalo = 0;
-                int status = 1;
-
-                for (int i = 0; i < 5; i++)
+                var letezik = (from x in context.Foglalas
+                               where x.Musor_Id == msr
+                               select x.Id_Foglalas).FirstOrDefault();
+                if (letezik != 0)
                 {
-                    for (int j = 0; j < 14; j++)
-                    {
-                        status = stat(foglalas, szamlalo, status);
 
-                        Seat s = new Seat(status);
-                        s.sszam = szamlalo + 1;
-                        s.Top = 100 + i * 60;
-                        s.Left = 20 + j * 60;
-                        mp.Controls.Add(s);
-                        szamlalo++;
+                    foglalas = (from x in context.Foglalas
+                                where x.Musor_Id == msr
+                                select x.Foglalt).ToArray();
+
+                    int szamlalo = 0;
+                    int status = 1;
+
+                    for (int i = 0; i < 5; i++)
+                    {
+                        for (int j = 0; j < 14; j++)
+                        {
+                            status = stat(foglalas, szamlalo, status);
+
+                            Seat s = new Seat(status);
+                            s.sszam = szamlalo + 1;
+                            s.Top = 100 + i * 60;
+                            s.Left = 20 + j * 60;
+                            mp.Controls.Add(s);
+                            szamlalo++;
+                        }
                     }
+                    LoadElements();
+                }
+                else
+                {
+                    MessageBox.Show("A kiválasztott előadás nem létezik!");
                 }
             }
             else
             {
-                MessageBox.Show("A kiválasztott előadás nem létezik!");
+                MessageBox.Show("Nincs kiválasztva műsor!");
             }
 
+            
 
+
+        }
+
+        private void LoadElements()
+        {
+            int a = mp.Controls[13].Left + 20;
+            Vaszon v = new Vaszon(a);
+            mp.Controls.Add(v);
+
+            Label l = new Label();
+            l.Text = "Vászon";
+            l.Top = 30;
+            l.Left = (a + 20) / 2;
+            mp.Controls.Add(l);
         }
 
         private static int stat(bool[] foglalas, int szamlalo, int status)
@@ -272,6 +302,104 @@ namespace ssp7wq_irf_project
                 }
 
             }
+        }
+
+        private void btn_export_Click(object sender, EventArgs e)
+        {
+
+            CreateExcel();
+        }
+
+        private void CreateExcel()
+        {
+            try
+            {
+
+                xlApp = new Excel.Application();
+
+                
+                xlWB = xlApp.Workbooks.Add(Missing.Value);
+
+                
+                xlSheet = xlWB.ActiveSheet;
+
+                
+                CreateTable();
+
+                
+                xlApp.Visible = true;
+                xlApp.UserControl = true;
+            }
+            catch (Exception ex)
+            {
+                string errMsg = string.Format("Error: {0}\nLine: {1}", ex.Message, ex.Source);
+                MessageBox.Show(errMsg, "Error");
+
+                
+                xlWB.Close(false, Type.Missing, Type.Missing);
+                xlApp.Quit();
+                xlWB = null;
+                xlApp = null;
+            }
+        }
+
+        private void CreateTable()
+        {
+            Musor = context.Musor.ToList();
+            string[] headers = new string[]
+            {
+                "Műsor azonosítója",
+                "Dátum",
+                "Időpont",
+                "Film címe",
+                //"Eladott jegyek száma",
+                //"Bevétel"
+            };
+
+            for (int i = 0; i < headers.Length; i++)
+            {
+                xlSheet.Cells[1, i + 1] = headers[i];                
+            }
+            
+
+            object[,] values = new object[Musor.Count, headers.Length];
+            int counter = 0;
+            foreach (Musor m in Musor)
+            {
+                values[counter, 0] = m.Id_Musor;
+                values[counter, 1] = m.Datum;
+                values[counter, 2] = m.Idopont;
+                values[counter, 3] = m.Film_Id;
+            }
+            
+
+            xlSheet.get_Range(
+                        GetCell(2, 1),
+                        GetCell(1 + values.GetLength(0), values.GetLength(1))).Value2 = values;
+
+            /*
+            xlSheet.get_Range(GetCell(2, 5),
+                              GetCell(context.Musor.Count(), 5)).Value2 = eladott;
+            xlSheet.get_Range(GetCell(2, 6),
+                              GetCell(context.Musor.Count(), 6)).Value2 =eladott*1000;*/
+
+        }
+
+        private string GetCell(int x, int y)
+        {
+            string ExcelCoordinate = "";
+            int dividend = y;
+            int modulo;
+
+            while (dividend > 0)
+            {
+                modulo = (dividend - 1) % 26;
+                ExcelCoordinate = Convert.ToChar(65 + modulo).ToString() + ExcelCoordinate;
+                dividend = (int)((dividend - modulo) / 26);
+            }
+            ExcelCoordinate += x.ToString();
+
+            return ExcelCoordinate;
         }
     }
 }

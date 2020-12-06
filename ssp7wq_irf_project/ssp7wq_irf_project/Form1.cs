@@ -35,6 +35,7 @@ namespace ssp7wq_irf_project
 
 
             LoadMenu();
+            LoadData();
 
             int width = this.Width;
             int height = this.Height - 250;
@@ -245,7 +246,7 @@ namespace ssp7wq_irf_project
 
         private void btn_save_Click(object sender, EventArgs e)
         {
-            foreach (Seat s in mp.Controls)
+            foreach (Seat s in mp.Controls.OfType<Seat>())
             {
                 var foglalt = (from x in context.Foglalas
                                where x.Id_Foglalas == s.sszam
@@ -257,44 +258,50 @@ namespace ssp7wq_irf_project
                 }
 
             }
-
-            Mentes m = new Mentes();
-            m.textBox1.Text = foglalt_helyek_szama.ToString();
-            m.textBox2.Text = ((foglalt_helyek_szama * 1000).ToString() + " Ft");
-            
-            if (m.ShowDialog()==DialogResult.OK)
+            if (foglalt_helyek_szama!=0)
             {
-                try
+                Mentes m = new Mentes();
+                m.textBox1.Text = foglalt_helyek_szama.ToString();
+                m.textBox2.Text = ((foglalt_helyek_szama * 1000).ToString() + " Ft");
+
+                if (m.ShowDialog() == DialogResult.OK)
                 {
-                    foreach (Seat s in mp.Controls)
+                    try
                     {
-                        var foglalt = (from x in context.Foglalas
-                                       where x.Id_Foglalas == s.sszam
-                                       select x).FirstOrDefault();
-
-                        if (foglalt.Foglalt == false && s.Status == 2)
+                        foreach (Seat s in mp.Controls)
                         {
-                            s.Status = 3;
-                            s.Enabled = false;
-                            foglalt.Foglalt = true;
-                            foglalt_helyek_szama++;
+                            var foglalt = (from x in context.Foglalas
+                                           where x.Id_Foglalas == s.sszam
+                                           select x).FirstOrDefault();
+
+                            if (foglalt.Foglalt == false && s.Status == 2)
+                            {
+                                s.Status = 3;
+                                s.Enabled = false;
+                                foglalt.Foglalt = true;
+                                foglalt_helyek_szama++;
+                            }
+
                         }
-
+                        context.SaveChanges();
                     }
-                    context.SaveChanges();
-                }
-                catch (Exception ex)
-                {
+                    catch (Exception ex)
+                    {
 
-                    MessageBox.Show(ex.Message);
+                        MessageBox.Show(ex.Message);
+                    }
                 }
+            }
+            else
+            {
+                MessageBox.Show("Nincs kiválasztva ülőhely!");
             }
 
         }
 
         private void btn_ccel_Click(object sender, EventArgs e)
         {
-            foreach (Seat s in mp.Controls)
+            foreach (Seat s in mp.Controls.OfType<Seat>())
             {
                 if (s.Status == 2)
                 {
@@ -306,7 +313,7 @@ namespace ssp7wq_irf_project
 
         private void btn_export_Click(object sender, EventArgs e)
         {
-
+            Musor = context.Musor.ToList();
             CreateExcel();
         }
 
@@ -345,14 +352,14 @@ namespace ssp7wq_irf_project
 
         private void CreateTable()
         {
-            Musor = context.Musor.ToList();
+            object [] eladott_jegyek;
             string[] headers = new string[]
             {
                 "Műsor azonosítója",
                 "Dátum",
                 "Időpont",
                 "Film címe",
-                //"Eladott jegyek száma",
+                "Eladott jegyek száma",
                 //"Bevétel"
             };
 
@@ -361,27 +368,39 @@ namespace ssp7wq_irf_project
                 xlSheet.Cells[1, i + 1] = headers[i];                
             }
             
+            eladott_jegyek = (from x in context.Foglalas
+                              group x by x.Musor_Id into g
+                              select new {id=g.Key, jegyek= g.Count()}).ToArray();
 
             object[,] values = new object[Musor.Count, headers.Length];
+
             int counter = 0;
             foreach (Musor m in Musor)
             {
                 values[counter, 0] = m.Id_Musor;
                 values[counter, 1] = m.Datum;
                 values[counter, 2] = m.Idopont;
-                values[counter, 3] = m.Film_Id;
+                values[counter, 3] = m.Film.Cím;
+                //values[counter, 4] = eladott_jegyek[counter];
+                //values[counter, 5] = eladott_jegyek[counter]*1000;
+                counter++;
             }
-            
+
+
 
             xlSheet.get_Range(
                         GetCell(2, 1),
                         GetCell(1 + values.GetLength(0), values.GetLength(1))).Value2 = values;
 
-            /*
-            xlSheet.get_Range(GetCell(2, 5),
-                              GetCell(context.Musor.Count(), 5)).Value2 = eladott;
-            xlSheet.get_Range(GetCell(2, 6),
-                              GetCell(context.Musor.Count(), 6)).Value2 =eladott*1000;*/
+
+            Excel.Range headerRange = xlSheet.get_Range(GetCell(1, 1), GetCell(1, headers.Length));
+            headerRange.Font.Bold = true;
+            headerRange.VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
+            headerRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+            headerRange.EntireColumn.AutoFit();
+            headerRange.RowHeight = 40;
+            headerRange.Interior.Color = Color.LightBlue;
+            headerRange.BorderAround2(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlThick);
 
         }
 
@@ -400,6 +419,20 @@ namespace ssp7wq_irf_project
             ExcelCoordinate += x.ToString();
 
             return ExcelCoordinate;
+        }
+
+        private void LoadData()
+        {
+            musorbindingSource.DataSource = (from x in context.Musor
+                                             select new
+                                             {
+                                                 Műror=x.Id_Musor,
+                                                 Dátum=x.Datum,
+                                                 Időpont=x.Idopont,
+                                                 Film=x.Film.Cím
+
+                                             }).ToList();
+            dataGridView1.DataSource = musorbindingSource;
         }
     }
 }

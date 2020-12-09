@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Reflection;
+using Microsoft.SqlServer.Server;
 
 namespace ssp7wq_irf_project
 {
@@ -246,6 +247,12 @@ namespace ssp7wq_irf_project
 
         private void btn_save_Click(object sender, EventArgs e)
         {
+            //var controls = from Control in mp.Controls select Control;
+            /*var foglaltak = from x in mp.Controls.OfType<Control>()
+                             where x is Seat && ((Seat)x).Status == 2
+                             select x;*/
+
+
             foreach (Seat s in mp.Controls.OfType<Seat>())
             {
                 var foglalt = (from x in context.Foglalas
@@ -268,7 +275,7 @@ namespace ssp7wq_irf_project
                 {
                     try
                     {
-                        foreach (Seat s in mp.Controls)
+                        foreach (Seat s in mp.Controls.OfType<Seat>())
                         {
                             var foglalt = (from x in context.Foglalas
                                            where x.Id_Foglalas == s.sszam
@@ -352,7 +359,7 @@ namespace ssp7wq_irf_project
 
         private void CreateTable()
         {
-            object [] eladott_jegyek;
+            
             string[] headers = new string[]
             {
                 "Műsor azonosítója",
@@ -360,7 +367,7 @@ namespace ssp7wq_irf_project
                 "Időpont",
                 "Film címe",
                 "Eladott jegyek száma",
-                //"Bevétel"
+                "Bevétel"
             };
 
             for (int i = 0; i < headers.Length; i++)
@@ -368,29 +375,38 @@ namespace ssp7wq_irf_project
                 xlSheet.Cells[1, i + 1] = headers[i];                
             }
             
-            eladott_jegyek = (from x in context.Foglalas
+            var eladott_jegyek = (from x in context.Foglalas
                               group x by x.Musor_Id into g
-                              select new {id=g.Key, jegyek= g.Count()}).ToArray();
-
+                              select new {id=g.Key, jegyek= g.Count()});
+            
             object[,] values = new object[Musor.Count, headers.Length];
 
             int counter = 0;
             foreach (Musor m in Musor)
             {
                 values[counter, 0] = m.Id_Musor;
-                values[counter, 1] = m.Datum;
-                values[counter, 2] = m.Idopont;
+                values[counter, 1] = m.Datum.ToString("yyyy.MM.dd");
+                values[counter, 2] = m.Idopont.ToString();
                 values[counter, 3] = m.Film.Cím;
-                //values[counter, 4] = eladott_jegyek[counter];
-                //values[counter, 5] = eladott_jegyek[counter]*1000;
+                values[counter, 4] = (from x in eladott_jegyek
+                                      where x.id == m.Id_Musor
+                                      select x.jegyek).FirstOrDefault();
+                values[counter, 5] = (int)values[counter, 4] * 1000;
                 counter++;
             }
 
 
-
+            
             xlSheet.get_Range(
                         GetCell(2, 1),
-                        GetCell(1 + values.GetLength(0), values.GetLength(1))).Value2 = values;
+                        GetCell(1 + values.GetLength(0), values.GetLength(1))).Value = values;
+            
+            /*int counter = 0;
+            foreach (var item in eladott_jegyek)
+            {
+                xlSheet.Cells[counter + 5, 1].Value = item.id.ToString();
+                counter++;
+            }*/
 
 
             Excel.Range headerRange = xlSheet.get_Range(GetCell(1, 1), GetCell(1, headers.Length));

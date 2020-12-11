@@ -168,6 +168,7 @@ namespace ssp7wq_irf_project
 
         private void btn_load_Click(object sender, EventArgs e)
         {
+            int szamlalo = 0;
             mp.Controls.Clear();
 
             if (listBox3.SelectedItem!=null)
@@ -184,7 +185,7 @@ namespace ssp7wq_irf_project
                                 where x.Musor_Id == msr
                                 select x.Foglalt).ToArray();
 
-                    int szamlalo = 0;
+                    
                     int status = 1;
 
                     for (int i = 0; i < 5; i++)
@@ -259,7 +260,7 @@ namespace ssp7wq_irf_project
                                where x.Id_Foglalas == s.sszam
                                select x).FirstOrDefault();
 
-                if (foglalt.Foglalt == false && s.Status == 2)
+                if (foglalt.Foglalt == false && s.Status == (int)Status_enum.Kivalasztva)
                 {
                     foglalt_helyek_szama++;
                 }
@@ -281,9 +282,9 @@ namespace ssp7wq_irf_project
                                            where x.Id_Foglalas == s.sszam
                                            select x).FirstOrDefault();
 
-                            if (foglalt.Foglalt == false && s.Status == 2)
+                            if (foglalt.Foglalt == false && s.Status == (int)Status_enum.Kivalasztva)
                             {
-                                s.Status = 3;
+                                s.Status = (int)Status_enum.Foglalt;
                                 s.Enabled = false;
                                 foglalt.Foglalt = true;
                                 foglalt_helyek_szama++;
@@ -291,6 +292,7 @@ namespace ssp7wq_irf_project
 
                         }
                         context.SaveChanges();
+                        foglalt_helyek_szama = 0;
                     }
                     catch (Exception ex)
                     {
@@ -310,9 +312,9 @@ namespace ssp7wq_irf_project
         {
             foreach (Seat s in mp.Controls.OfType<Seat>())
             {
-                if (s.Status == 2)
+                if (s.Status == (int)Status_enum.Kivalasztva)
                 {
-                    s.Status = 1;
+                    s.Status = (int)Status_enum.Szabad;
                 }
 
             }
@@ -376,6 +378,7 @@ namespace ssp7wq_irf_project
             }
             
             var eladott_jegyek = (from x in context.Foglalas
+                                  where x.Foglalt==true
                               group x by x.Musor_Id into g
                               select new {id=g.Key, jegyek= g.Count()});
             

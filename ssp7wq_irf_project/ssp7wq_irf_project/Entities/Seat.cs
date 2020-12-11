@@ -22,11 +22,11 @@ namespace ssp7wq_irf_project.reserve
 				_status = value;
 				if (_status<1)
 				{
-					_status = 3;
+					_status = (int)Status_enum.Foglalt;
 				}
 				if (_status>3)
 				{
-					_status = 1;
+					_status = (int)Status_enum.Szabad;
 				}
 
 				if (_status==1)
@@ -50,11 +50,11 @@ namespace ssp7wq_irf_project.reserve
 			Height = Width;
 			if (status==1)
 			{
-				Status = 1;
+				Status = (int)Status_enum.Szabad;
 			}
 			else if (status==3)
 			{
-				Status = 3;
+				Status = (int)Status_enum.Foglalt;
 			}
 
 			if (Status==3)
@@ -66,13 +66,13 @@ namespace ssp7wq_irf_project.reserve
 
 		private void Seat_MouseClick(object sender, MouseEventArgs e)
 		{
-			if (Status==1)
+			if (Status==(int)Status_enum.Szabad)
 			{
-				Status = 2;
+				Status = (int)Status_enum.Kivalasztva;
 			}
 			else
 			{
-				Status = 1;
+				Status = (int)Status_enum.Szabad;
 			}
 			
 			

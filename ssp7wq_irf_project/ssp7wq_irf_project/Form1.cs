@@ -54,22 +54,23 @@ namespace ssp7wq_irf_project
             {
                 case "Film címe":
                     textBox1.Enabled = true;
-                    textBox1.Clear();
-
+                    listBox1.DisplayMember = "Cím";
 
                     var cim = (from x in context.Film
-                               where x.Cím.StartsWith(textBox1.Text)
+                               where x.Cím.Contains(textBox1.Text)
                                select x);
-                    listBox1.DisplayMember = "Cím";
+
                     listBox1.DataSource = cim.ToList();
 
                     break;
                 case "Dátum":
                     textBox1.Enabled = false;
+                    listBox1.DisplayMember = "Datum";
+
                     var datum = (from x in context.Musor
                                  select x);
-                    listBox1.DisplayMember = "Datum";
-                    listBox1.DataSource = datum.Distinct().ToList();
+
+                    listBox1.DataSource = datum.ToList();
                     break;
                 default:
                     break;
@@ -87,6 +88,7 @@ namespace ssp7wq_irf_project
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            textBox1.Clear();
             LoadMenu();
         }
 
@@ -98,13 +100,13 @@ namespace ssp7wq_irf_project
             {
                 case "Film címe":
                     textBox1.Enabled = true;
-                    textBox1.Clear();
+                    listBox2.DisplayMember = "Datum";
 
                     var film = ((Film)listBox1.SelectedItem).Id_Film;
                     var musor = (from x in context.Musor
                                  where x.Film_Id==film
                                  select x);
-                    listBox2.DisplayMember = "Datum";
+
                     listBox2.DataSource = musor.ToList();
                     filmBindingSource.DataSource = (from x in context.Film
                                                     where x.Id_Film == film
@@ -113,11 +115,12 @@ namespace ssp7wq_irf_project
                     break;
                 case "Dátum":
                     textBox1.Enabled = false;
+                    listBox2.DisplayMember = "Cím";
                     var musor_aznapi = ((Musor)listBox1.SelectedItem);
                     var cim =   (from x in context.Musor
                                  where x.Datum==musor_aznapi.Datum
                                  select x.Film);
-                    listBox2.DisplayMember = "Cím";
+
                     listBox2.DataSource = cim.Distinct().ToList();
                     break;
                 default:
@@ -133,24 +136,25 @@ namespace ssp7wq_irf_project
             {
                 case "Film címe":
                     textBox1.Enabled = true;
-                    textBox1.Clear();
+                    listBox3.DisplayMember = "Idopont";
                     var film = ((Film)listBox1.SelectedItem).Id_Film;
                     var musor = ((Musor)listBox2.SelectedItem).Datum;
                     var idop = (from x in context.Musor
                                  where x.Film_Id == film && x.Datum==musor
                                  select x);
-                    listBox3.DisplayMember = "Idopont";
+
                     listBox3.DataSource = idop.ToList();
 
                     break;
                 case "Dátum":
                     textBox1.Enabled = false;
+                    listBox3.DisplayMember = "Idopont";
                     var filmcim = ((Film)listBox2.SelectedItem).Id_Film;
                     var datum = ((Musor)listBox1.SelectedItem).Datum;
                     var idopont = (from x in context.Musor
                                    where x.Datum==datum && x.Film_Id==filmcim
                                  select x);
-                    listBox3.DisplayMember = "Idopont";
+
                     listBox3.DataSource = idopont.ToList();
                     filmBindingSource.DataSource = (from x in context.Film
                                                     where x.Id_Film == filmcim
@@ -248,10 +252,6 @@ namespace ssp7wq_irf_project
 
         private void btn_save_Click(object sender, EventArgs e)
         {
-            //var controls = from Control in mp.Controls select Control;
-            /*var foglaltak = from x in mp.Controls.OfType<Control>()
-                             where x is Seat && ((Seat)x).Status == 2
-                             select x;*/
 
 
             foreach (Seat s in mp.Controls.OfType<Seat>())
@@ -404,12 +404,6 @@ namespace ssp7wq_irf_project
                         GetCell(2, 1),
                         GetCell(1 + values.GetLength(0), values.GetLength(1))).Value = values;
             
-            /*int counter = 0;
-            foreach (var item in eladott_jegyek)
-            {
-                xlSheet.Cells[counter + 5, 1].Value = item.id.ToString();
-                counter++;
-            }*/
 
 
             Excel.Range headerRange = xlSheet.get_Range(GetCell(1, 1), GetCell(1, headers.Length));
@@ -420,6 +414,17 @@ namespace ssp7wq_irf_project
             headerRange.RowHeight = 40;
             headerRange.Interior.Color = Color.LightBlue;
             headerRange.BorderAround2(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlThick);
+
+            Excel.Range firstcolumn = xlSheet.get_Range(GetCell(2, 1), GetCell(1+values.GetLength(0),1));
+            firstcolumn.Font.Bold = true;
+            firstcolumn.VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
+            firstcolumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
+            firstcolumn.Interior.Color = Color.LightGray;
+
+            int lastcolumnID = xlSheet.UsedRange.Columns.Count;
+            Excel.Range lastcolumn = xlSheet.get_Range(GetCell(2, lastcolumnID), GetCell(1 + values.GetLength(0), lastcolumnID));
+            lastcolumn.Font.Italic = true;
+            lastcolumn.NumberFormat = string.Format("# ##0 Ft");
 
         }
 

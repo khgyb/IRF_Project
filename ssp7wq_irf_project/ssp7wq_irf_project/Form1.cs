@@ -37,14 +37,30 @@ namespace ssp7wq_irf_project
 
             LoadMenu();
             LoadData();
+            LoadPanel();
+        }
 
+        private void LoadData()
+        {
+            musorbindingSource.DataSource = (from x in context.Musor
+                                             select new
+                                             {
+                                                 Műror = x.Id_Musor,
+                                                 Dátum = x.Datum,
+                                                 Időpont = x.Idopont,
+                                                 Film = x.Film.Cím
+
+                                             }).ToList();
+            dataGridView1.DataSource = musorbindingSource;
+        }
+
+        private void LoadPanel()
+        {
             int width = this.Width;
             int height = this.Height - 250;
             mp = new MainPanel(width, height);
             Controls.Add(mp);
         }
-
-
 
         private void LoadMenu()
         {
@@ -76,14 +92,6 @@ namespace ssp7wq_irf_project
                     break;
             }
         }
-
-        private void ListBox_refresh()
-        {
-            listBox1.Refresh();
-            listBox2.Refresh();
-            listBox3.Refresh();
-        }
-
 
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -165,10 +173,7 @@ namespace ssp7wq_irf_project
             }
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-            LoadMenu();
-        }
+
 
         private void btn_load_Click(object sender, EventArgs e)
         {
@@ -445,18 +450,16 @@ namespace ssp7wq_irf_project
             return ExcelCoordinate;
         }
 
-        private void LoadData()
+        private void ListBox_refresh()
         {
-            musorbindingSource.DataSource = (from x in context.Musor
-                                             select new
-                                             {
-                                                 Műror=x.Id_Musor,
-                                                 Dátum=x.Datum,
-                                                 Időpont=x.Idopont,
-                                                 Film=x.Film.Cím
+            listBox1.Refresh();
+            listBox2.Refresh();
+            listBox3.Refresh();
+        }
 
-                                             }).ToList();
-            dataGridView1.DataSource = musorbindingSource;
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            LoadMenu();
         }
     }
 }
